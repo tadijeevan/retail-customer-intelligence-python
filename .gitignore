@@ -1,0 +1,38 @@
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Raw and processed datasets
+data/raw/*
+data/processed/*
+
+# Keep placeholder files in data folders
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Generated temporary files
+*.log
+.DS_Store
+Thumbs.db
+
+# Test and analysis cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor settings
+.vscode/
