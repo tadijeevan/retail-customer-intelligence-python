@@ -5,74 +5,113 @@ import pandas as pd
 from src.data_cleaning import prepare_transaction_data
 
 
-# Define project paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RAW_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "Online Retail.xlsx"
+PROCESSED_DATA_PATH = (
+    PROJECT_ROOT / "data" / "processed" / "online_retail_prepared.csv"
+)
 
 
 def main():
-    """Load the raw dataset, prepare it, and display a summary."""
+    """Prepare and save the retail transaction dataset."""
 
-    print("=" * 60)
+    print("=" * 70)
     print("RETAIL CUSTOMER INTELLIGENCE PROJECT")
-    print("DATA PREPARATION")
-    print("=" * 60)
+    print("DATA PREPARATION PIPELINE")
+    print("=" * 70)
 
-    # Verify that the dataset exists
+    # Step 1: Check the source dataset
     if not RAW_DATA_PATH.exists():
         raise FileNotFoundError(
-            f"Dataset not found: {RAW_DATA_PATH}\n"
-            "Ensure Online Retail.xlsx is inside data/raw/."
+            f"Dataset not found: {RAW_DATA_PATH}"
         )
 
-    # Load the original dataset
+    # Step 2: Load the original Excel dataset
     print("\nStep 1: Loading the original dataset...")
     df = pd.read_excel(RAW_DATA_PATH)
 
+    original_rows, original_columns = df.shape
+
     print(f"Original dataset shape: {df.shape}")
 
-    # Apply the existing data-cleaning functions
+    # Step 3: Prepare the transaction data
     print("\nStep 2: Preparing transaction data...")
     cleaned_df = prepare_transaction_data(df)
 
-    print("Data preparation completed successfully.")
     print(f"Prepared dataset shape: {cleaned_df.shape}")
 
-    # Display standardized column names
-    print("\nStep 3: Prepared column names:")
-    print(cleaned_df.columns.tolist())
+    # Step 4: Display data quality indicators
+    print("\nStep 3: Data quality indicators:")
 
-    # Display data types
-    print("\nStep 4: Prepared data types:")
-    print(cleaned_df.dtypes.to_string())
+    print(f"Missing customer IDs: {cleaned_df['customerid'].isna().sum():,}")
+    print(f"Exact duplicate rows: {cleaned_df.duplicated().sum():,}")
+    print(f"Cancellation invoice rows: {cleaned_df['is_cancellation'].sum():,}")
+    print(f"Negative quantity rows: {(cleaned_df['quantity'] < 0).sum():,}")
+    print(f"Zero unit-price rows: {(cleaned_df['unitprice'] == 0).sum():,}")
+    print(f"Negative unit-price rows: {(cleaned_df['unitprice'] < 0).sum():,}")
 
-    # Display missing values
-    print("\nStep 5: Missing values by column:")
-    print(cleaned_df.isna().sum().to_string())
+    # Step 5: Validate the prepared data
+    print("\nStep 4: Validating the prepared dataset...")
 
-    # Count cancellation-style invoices
-    cancellation_count = cleaned_df["is_cancellation"].sum()
-    print(f"\nCancellation-style invoice rows: {cancellation_count:,}")
+    if cleaned_df.empty:
+        raise ValueError("The prepared dataset is empty.")
 
-    # Count negative quantities
-    negative_quantity_count = (cleaned_df["quantity"] < 0).sum()
-    print(f"Rows with negative quantities: {negative_quantity_count:,}")
+    if len(cleaned_df) != original_rows:
+        raise ValueError(
+            f"Unexpected row-count change: original={original_rows}, "
+            f"prepared={len(cleaned_df)}"
+        )
 
-    # Count non-positive prices
-    non_positive_price_count = (cleaned_df["unitprice"] <= 0).sum()
-    print(f"Rows with non-positive unit prices: {non_positive_price_count:,}")
+    required_columns = {
+        "invoiceno",
+        "stockcode",
+        "invoicedate",
+        "quantity",
+        "unitprice",
+        "customerid",
+        "is_cancellation",
+        "line_value",
+    }
 
-    # Display the first five prepared rows
-    print("\nStep 6: First five prepared rows:")
+    missing_columns = required_columns.difference(cleaned_df.columns)
+
+    if missing_columns:
+        raise ValueError(
+            f"Required columns are missing: {sorted(missing_columns)}"
+        )
+
+    print("Validation passed. All original rows have been retained.")
+
+    # Step 6: Save the prepared dataset
+    print("\nStep 5: Saving the prepared dataset...")
+
+    PROCESSED_DATA_PATH.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    cleaned_df.to_csv(
+        PROCESSED_DATA_PATH,
+        index=False,
+    )
+
+    print(f"Saved to: {PROCESSED_DATA_PATH}")
+
+    # Step 7: Display a sample and summary
+    print("\nFirst five prepared rows:")
     print(cleaned_df.head().to_string(index=False))
 
-    print("\n" + "=" * 60)
+    print("\n" + "=" * 70)
     print("DATA PREPARATION SUMMARY")
-    print("=" * 60)
-    print("The original Excel file has not been modified.")
-    print("The prepared DataFrame exists in memory only.")
+    print("=" * 70)
+    print(f"Original rows: {original_rows:,}")
+    print(f"Prepared rows: {len(cleaned_df):,}")
+    print(f"Original columns: {original_columns}")
+    print(f"Prepared columns: {len(cleaned_df.columns)}")
+    print(f"Total line value: £{cleaned_df['line_value'].sum():,.2f}")
+    print("\nOriginal Excel file remains unchanged.")
     print("No rows have been deleted.")
-    print("No processed dataset has been saved yet.")
+    print("Pipeline completed successfully.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,3 @@
+cluster,customer_count,avg_recency_days,median_recency_days,avg_frequency,median_frequency,avg_positive_transaction_value,median_positive_transaction_value,avg_distinct_products,median_distinct_products,customer_percentage
+0,2590,135.13474903474903,96.0,1.6413127413127413,1.0,517.3142517374517,352.18,25.435521235521236,20.0,59.69117308135515
+1,1749,30.70783304745569,18.0,8.167524299599771,5.0,4329.081756432247,1981.92,115.29445397369926,89.0,40.30882691864485

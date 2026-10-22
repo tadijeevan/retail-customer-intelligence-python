@@ -1,0 +1,4 @@
+entry_category,stockcode,description,positive_value,negative_value,net_transaction_line_value,positive_quantity,negative_quantity,net_quantity,transaction_rows,cancellation_rows
+Manual adjustment,M,Manual,78112.82,-146784.46,-68671.64,7231,-4066,3165,572,244
+Postage,DOT,DOTCOM POSTAGE,206248.77000000002,-3.29,206245.48,1708,-1,1707,710,1
+Postage,POST,POSTAGE,78101.88,-11871.24,66230.64,6500,-147,6353,1256,126
