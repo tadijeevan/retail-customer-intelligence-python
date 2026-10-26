@@ -36,3 +36,13 @@ htmlcov/
 
 # Editor settings
 .vscode/
+# Customer-level analytical outputs (keep local)
+reports/customer_cluster_assignments.csv
+reports/customer_purchase_frequency.csv
+reports/customer_rfm.csv
+reports/customer_rfm_scored.csv
+reports/customer_segments.csv
+reports/customer_spending_analysis.csv
+
+# Temporary pipeline backup
+src/pipeline_backup.py

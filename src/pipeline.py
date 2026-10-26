@@ -4,12 +4,57 @@ import sys
 import time
 
 
-def run_module(module_name: str) -> None:
-    """Execute a Python module and stop if it fails."""
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-    print("\n" + "=" * 75)
-    print(f"RUNNING: {module_name}")
-    print("=" * 75)
+
+PIPELINE_MODULES = [
+    # 1. Data preparation and quality
+    "src.prepare_data",
+    "src.data_quality",
+    "src.data_quality_checks",
+    "src.data_quality_report",
+
+    # 2. Sales and product analysis
+    "src.exploratory_data_analysis",
+    "src.monthly_sales_analysis",
+    "src.product_sales_analysis",
+
+    # 3. Customer analysis and RFM segmentation
+    "src.inspect_customer_data",
+    "src.customer_purchase_frequency",
+    "src.customer_spending_analysis",
+    "src.rfm_analysis",
+    "src.rfm_scoring",
+    "src.customer_segmentation",
+    "src.customer_segmentation_visualization",
+
+    # 4. Market basket analysis
+    "src.prepare_market_basket",
+    "src.build_market_basket_matrix",
+    "src.market_basket_analysis",
+    "src.enhance_market_basket_report",
+    "src.validate_market_basket_rules",
+
+    # 5. Standardized outputs required by downstream modules
+    "src.build_standard_outputs",
+
+    # 6. Customer clustering
+    "src.prepare_clustering_data",
+    "src.evaluate_clustering",
+    "src.fit_customer_clusters",
+    "src.visualize_customer_clusters",
+
+    # 7. Monthly sales forecasting
+    "src.forecasting",
+]
+
+
+def run_module(module_name: str) -> None:
+    """Execute a project module and stop if it fails."""
+
+    print("\n" + "=" * 75, flush=True)
+    print(f"RUNNING: {module_name}", flush=True)
+    print("=" * 75, flush=True)
 
     start_time = time.time()
 
@@ -27,53 +72,22 @@ def run_module(module_name: str) -> None:
             f"with exit code {result.returncode}."
         )
 
-    print(f"\nCompleted: {module_name}")
-    print(f"Execution time: {elapsed_time:.2f} seconds")
-
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-
-
-# Execute modules in dependency order.
-PIPELINE_MODULES = [
-    # Data preparation and quality
-    "src.prepare_data",
-    "src.data_quality",
-    "src.data_quality_checks",
-    "src.data_quality_report",
-
-    # Sales and product analysis
-    "src.exploratory_data_analysis",
-    "src.monthly_sales_analysis",
-    "src.product_sales_analysis",
-
-    # Customer analysis
-    "src.inspect_customer_data",
-    "src.customer_purchase_frequency",
-    "src.customer_spending_analysis",
-    "src.rfm_analysis",
-    "src.rfm_scoring",
-    "src.customer_segmentation",
-    "src.customer_segmentation_visualization",
-
-    # Market basket analysis
-    "src.prepare_market_basket",
-    "src.build_market_basket_matrix",
-    "src.market_basket_analysis",
-    "src.enhance_market_basket_report",
-    "src.validate_market_basket_rules",
-]
+    print(
+        f"\nCompleted: {module_name} "
+        f"({elapsed_time:.2f} seconds)",
+        flush=True,
+    )
 
 
 def main() -> None:
-    """Run the currently implemented analytics workflow."""
+    """Run the end-to-end retail analytics workflow."""
 
-    print("=" * 75)
-    print("RETAIL CUSTOMER INTELLIGENCE — ANALYTICS PIPELINE")
-    print("=" * 75)
+    print("=" * 75, flush=True)
+    print("RETAIL CUSTOMER INTELLIGENCE - ANALYTICS PIPELINE", flush=True)
+    print("=" * 75, flush=True)
 
-    print(f"\nProject directory: {PROJECT_ROOT}")
-    print(f"Python executable: {sys.executable}")
+    print(f"\nProject directory: {PROJECT_ROOT}", flush=True)
+    print(f"Python executable: {sys.executable}", flush=True)
 
     pipeline_start = time.time()
 
@@ -82,26 +96,26 @@ def main() -> None:
             run_module(module_name)
 
     except RuntimeError as error:
-        print("\n" + "!" * 75)
-        print("PIPELINE FAILED")
-        print(str(error))
-        print("!" * 75)
+        print("\n" + "!" * 75, flush=True)
+        print("PIPELINE FAILED", flush=True)
+        print(str(error), flush=True)
+        print("!" * 75, flush=True)
         raise SystemExit(1)
 
     elapsed_time = time.time() - pipeline_start
 
-    print("\n" + "=" * 75)
-    print("CURRENT ANALYTICS PIPELINE COMPLETED SUCCESSFULLY")
-    print("=" * 75)
+    print("\n" + "=" * 75, flush=True)
+    print("ANALYTICS PIPELINE COMPLETED SUCCESSFULLY", flush=True)
+    print("=" * 75, flush=True)
 
-    print(f"Total execution time: {elapsed_time:.2f} seconds")
+    print(f"Total execution time: {elapsed_time:.2f} seconds", flush=True)
+    print(f"Modules executed: {len(PIPELINE_MODULES)}", flush=True)
 
-    print("\nNote:")
     print(
-        "This version orchestrates the currently implemented modules. "
-        "Clustering, forecasting, standardized final outputs, and the "
-        "remaining acceptance criteria will be integrated and validated "
-        "in subsequent steps."
+        "\nNote: Forecasting results are baseline comparisons only. "
+        "The short historical period does not support reliable "
+        "long-term or annual seasonal conclusions.",
+        flush=True,
     )
 
 

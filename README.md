@@ -51,15 +51,16 @@ The original dataset will be stored locally and excluded from Git.
 
 ```text
 retail-customer-intelligence-python/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── docs/
-├── notebooks/
-├── reports/
-│   └── figures/
-├── src/
-├── tests/
-├── .gitignore
-├── README.md
-└── requirements.txt
+|-- data/
+|   |-- raw/
+|   `-- processed/
+|-- docs/
+|-- notebooks/
+|-- reports/
+|   `-- figures/
+|-- src/
+|-- tests/
+|-- .gitignore
+|-- README.md
+`-- requirements.txt
+```

@@ -1,0 +1,3 @@
+model,evaluation_months,mae,rmse
+Previous-month baseline,8,155334.48575,211930.03565626842
+Three-month moving average,8,189970.2745,254361.08805998988
